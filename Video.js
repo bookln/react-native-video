@@ -183,6 +183,7 @@ export default class Video extends Component {
     Object.assign(nativeProps, {
       style: [styles.base, nativeProps.style],
       resizeMode: nativeResizeMode,
+      decrypt:this.props.decrypt,
       src: {
         uri,
         isNetwork,
