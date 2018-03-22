@@ -1,6 +1,7 @@
 package com.yunti.media.util;
 
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.brentvatne.react.ReactVideoPackage;
@@ -13,6 +14,7 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Field;
 
 /**
  * A {@link DataSource} for reading encrypt local files.

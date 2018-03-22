@@ -47,6 +47,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
+import com.yunti.media.util.FileDecryptionDataSourceFactory;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -199,7 +200,7 @@ class ReactExoplayerView extends FrameLayout implements
 
     // Internal methods
 
-    private void initializePlayer() {
+    private void initializePlayer() { setPlayWhenReady(!isPaused);
         if (player == null) {
             TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
             trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
@@ -640,7 +641,7 @@ class ReactExoplayerView extends FrameLayout implements
     private DataSource.Factory mFileDecryptDataSourceFactory;
 
     private DataSource.Factory getMediaDataSourceFactory(Uri uri) {
-        //本地文件
+        //local
         if (com.google.android.exoplayer2.util.Util.isLocalFileUri(uri)) {
             //should decrypt
             if (mFileDecryptDataSourceFactory == null) {
@@ -648,7 +649,7 @@ class ReactExoplayerView extends FrameLayout implements
             }
             return mFileDecryptDataSourceFactory;
         }
-        //网络文件
+        //remote
         else {
             if (mHttpDataSourceFactory == null) {
                 mHttpDataSourceFactory = buildDataSourceFactory(true);
