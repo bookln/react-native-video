@@ -73,7 +73,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
         Context context = videoView.getContext().getApplicationContext();
         String uriString = src.hasKey(PROP_SRC_URI) ? src.getString(PROP_SRC_URI) : null;
         String extension = src.hasKey(PROP_SRC_TYPE) ? src.getString(PROP_SRC_TYPE) : null;
-
+        boolean decrypt = src.hasKey(PROP_DECRYPT) ? src.getBoolean(PROP_DECRYPT) : false;
         if (TextUtils.isEmpty(uriString)) {
             return;
         }
@@ -82,6 +82,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
             Uri srcUri = Uri.parse(uriString);
 
             if (srcUri != null) {
+                videoView.setDecrypt(decrypt);
                 videoView.setSrc(srcUri, extension);
             }
         } else {
@@ -100,6 +101,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
             if (identifier > 0) {
                 Uri srcUri = RawResourceDataSource.buildRawResourceUri(identifier);
                 if (srcUri != null) {
+                    videoView.setDecrypt(decrypt);
                     videoView.setRawSrc(srcUri, extension);
                 }
             }
@@ -154,11 +156,6 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
     @ReactProp(name = PROP_DISABLE_FOCUS, defaultBoolean = false)
     public void setDisableFocus(final ReactExoplayerView videoView, final boolean disableFocus) {
         videoView.setDisableFocus(disableFocus);
-    }
-
-    @ReactProp(name = PROP_DECRYPT, defaultBoolean = false)
-    public void setDecrypt(final ReactExoplayerView videoView, final boolean decrypt) {
-        videoView.setDecrypt(decrypt);
     }
 
     private boolean startsWithValidScheme(String uriString) {
