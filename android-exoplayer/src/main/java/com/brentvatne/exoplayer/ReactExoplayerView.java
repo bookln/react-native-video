@@ -94,6 +94,7 @@ class ReactExoplayerView extends FrameLayout implements
     private String extension;
     private boolean repeat;
     private boolean disableFocus;
+    private boolean decrypt;
     private float mProgressUpdateInterval = 250.0f;
     private boolean playInBackground = false;
     // \ End props
@@ -637,6 +638,10 @@ class ReactExoplayerView extends FrameLayout implements
         this.disableFocus = disableFocus;
     }
 
+    public void setDecrypt(boolean decrypt) {
+        this.decrypt = decrypt;
+    }
+
     private DataSource.Factory mHttpDataSourceFactory;
     private DataSource.Factory mFileDecryptDataSourceFactory;
 
@@ -644,10 +649,19 @@ class ReactExoplayerView extends FrameLayout implements
         //local
         if (com.google.android.exoplayer2.util.Util.isLocalFileUri(uri)) {
             //should decrypt
-            if (mFileDecryptDataSourceFactory == null) {
-                mFileDecryptDataSourceFactory = new FileDecryptionDataSourceFactory(themedReactContext.getApplicationContext(),null);
+            if (decrypt) {
+                if (mFileDecryptDataSourceFactory == null) {
+                    mFileDecryptDataSourceFactory = new FileDecryptionDataSourceFactory(themedReactContext.getApplicationContext(), null);
+                }
+                return mFileDecryptDataSourceFactory;
             }
-            return mFileDecryptDataSourceFactory;
+            //normal file
+            else {
+                if (mediaDataSourceFactory == null) {
+                    mediaDataSourceFactory = DataSourceUtil.getDefaultDataSourceFactory(getContext(), BANDWIDTH_METER);
+                }
+                return mediaDataSourceFactory;
+            }
         }
         //remote
         else {
