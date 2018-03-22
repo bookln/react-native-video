@@ -645,7 +645,7 @@ class ReactExoplayerView extends FrameLayout implements
         if (com.google.android.exoplayer2.util.Util.isLocalFileUri(uri)) {
             //should decrypt
             if (mFileDecryptDataSourceFactory == null) {
-                mFileDecryptDataSourceFactory = new FileDecryptionDataSourceFactory(themedReactContext.getBaseContext(),null);
+                mFileDecryptDataSourceFactory = new FileDecryptionDataSourceFactory(themedReactContext.getApplicationContext(),null);
             }
             return mFileDecryptDataSourceFactory;
         }
