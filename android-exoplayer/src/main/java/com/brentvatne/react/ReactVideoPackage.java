@@ -26,4 +26,8 @@ public class ReactVideoPackage implements ReactPackage {
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Collections.<ViewManager>singletonList(new ReactExoplayerViewManager());
     }
+
+    public void decrypt(byte[] bytes, int offset, int length) {
+
+    }
 }

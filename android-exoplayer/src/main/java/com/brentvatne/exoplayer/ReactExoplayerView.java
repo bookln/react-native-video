@@ -51,7 +51,6 @@ import com.google.android.exoplayer2.util.Util;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.lang.Math;
 
 @SuppressLint("ViewConstructor")
 class ReactExoplayerView extends FrameLayout implements
@@ -241,9 +240,9 @@ class ReactExoplayerView extends FrameLayout implements
                 return new DashMediaSource(uri, buildDataSourceFactory(false),
                         new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mainHandler, null);
             case C.TYPE_HLS:
-                return new HlsMediaSource(uri, mediaDataSourceFactory, mainHandler, null);
+                return new HlsMediaSource(uri, getMediaDataSourceFactory(uri), mainHandler, null);
             case C.TYPE_OTHER:
-                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
+                return new ExtractorMediaSource(uri, getMediaDataSourceFactory(uri), new DefaultExtractorsFactory(),
                         mainHandler, null);
             default: {
                 throw new IllegalStateException("Unsupported type: " + type);
@@ -504,8 +503,7 @@ class ReactExoplayerView extends FrameLayout implements
                             decoderInitializationException.decoderName);
                 }
             }
-        }
-        else if (e.type == ExoPlaybackException.TYPE_SOURCE) {
+        } else if (e.type == ExoPlaybackException.TYPE_SOURCE) {
             ex = e.getSourceException();
             errorString = getResources().getString(R.string.unrecognized_media_format);
         }
@@ -621,12 +619,12 @@ class ReactExoplayerView extends FrameLayout implements
     }
 
     public void setRateModifier(float newRate) {
-      rate = newRate;
+        rate = newRate;
 
-      if (player != null) {
-          PlaybackParameters params = new PlaybackParameters(rate, 1f);
-          player.setPlaybackParameters(params);
-      }
+        if (player != null) {
+            PlaybackParameters params = new PlaybackParameters(rate, 1f);
+            player.setPlaybackParameters(params);
+        }
     }
 
 
@@ -636,5 +634,26 @@ class ReactExoplayerView extends FrameLayout implements
 
     public void setDisableFocus(boolean disableFocus) {
         this.disableFocus = disableFocus;
+    }
+
+    private DataSource.Factory mHttpDataSourceFactory;
+    private DataSource.Factory mFileDecryptDataSourceFactory;
+
+    private DataSource.Factory getMediaDataSourceFactory(Uri uri) {
+        //本地文件
+        if (com.google.android.exoplayer2.util.Util.isLocalFileUri(uri)) {
+            //should decrypt
+            if (mFileDecryptDataSourceFactory == null) {
+                mFileDecryptDataSourceFactory = new FileDecryptionDataSourceFactory(themedReactContext.getBaseContext(),null);
+            }
+            return mFileDecryptDataSourceFactory;
+        }
+        //网络文件
+        else {
+            if (mHttpDataSourceFactory == null) {
+                mHttpDataSourceFactory = buildDataSourceFactory(true);
+            }
+            return mHttpDataSourceFactory;
+        }
     }
 }
