@@ -428,6 +428,16 @@ class ReactExoplayerView extends FrameLayout implements
         Log.d(TAG, text);
     }
 
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+    }
+
     private void startProgressHandler() {
         progressHandler.sendEmptyMessage(SHOW_PROGRESS);
     }
@@ -456,7 +466,7 @@ class ReactExoplayerView extends FrameLayout implements
     }
 
     @Override
-    public void onPositionDiscontinuity() {
+    public void onPositionDiscontinuity(int reason) {
         if (playerNeedsSource) {
             // This will only occur if the user has performed a seek whilst in the error state. Update the
             // resume position so that if the user then retries, playback will resume from the position to
@@ -466,7 +476,7 @@ class ReactExoplayerView extends FrameLayout implements
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTimelineChanged(Timeline timeline, Object manifest,int reason) {
         // Do nothing.
     }
 
@@ -478,6 +488,11 @@ class ReactExoplayerView extends FrameLayout implements
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters params) {
         eventEmitter.playbackRateChange(params.speed);
+    }
+
+    @Override
+    public void onSeekProcessed() {
+
     }
 
     @Override

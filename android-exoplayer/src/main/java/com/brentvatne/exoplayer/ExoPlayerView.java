@@ -207,17 +207,27 @@ public final class ExoPlayerView extends FrameLayout {
         }
 
         @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+        }
+
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+        @Override
         public void onPlayerError(ExoPlaybackException e) {
             // Do nothing.
         }
 
         @Override
-        public void onPositionDiscontinuity() {
+        public void onPositionDiscontinuity(int reason) {
             // Do nothing.
         }
 
         @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
+        public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
             // Do nothing.
         }
 
@@ -229,6 +239,11 @@ public final class ExoPlayerView extends FrameLayout {
         @Override
         public void onPlaybackParametersChanged(PlaybackParameters params) {
             // Do nothing
+        }
+
+        @Override
+        public void onSeekProcessed() {
+
         }
 
         @Override
