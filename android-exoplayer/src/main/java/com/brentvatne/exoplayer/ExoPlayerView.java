@@ -37,6 +37,15 @@ public final class ExoPlayerView extends FrameLayout {
     private final AspectRatioFrameLayout layout;
     private final ComponentListener componentListener;
     private SimpleExoPlayer player;
+    private ExoPlayerViewDelegate mDelegate;
+
+    public ExoPlayerViewDelegate getDelegate() {
+        return mDelegate;
+    }
+
+    public void setDelegate(ExoPlayerViewDelegate delegate) {
+        mDelegate = delegate;
+    }
 
     public ExoPlayerView(Context context) {
         this(context, null);
@@ -192,6 +201,9 @@ public final class ExoPlayerView extends FrameLayout {
         @Override
         public void onRenderedFirstFrame() {
             shutterView.setVisibility(INVISIBLE);
+            if (mDelegate != null) {
+                mDelegate.onRenderedFirstFrame();
+            }
         }
 
         // ExoPlayer.EventListener implementation
@@ -250,6 +262,10 @@ public final class ExoPlayerView extends FrameLayout {
         public void onMetadata(Metadata metadata) {
             Log.d("onMetadata", "onMetadata");
         }
+    }
+
+    public interface ExoPlayerViewDelegate {
+        void onRenderedFirstFrame();
     }
 
 }
