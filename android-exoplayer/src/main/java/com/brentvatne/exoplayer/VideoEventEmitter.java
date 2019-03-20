@@ -47,6 +47,7 @@ class VideoEventEmitter {
     private static final String EVENT_AUDIO_BECOMING_NOISY = "onVideoAudioBecomingNoisy";
     private static final String EVENT_AUDIO_FOCUS_CHANGE = "onAudioFocusChanged";
     private static final String EVENT_PLAYBACK_RATE_CHANGE = "onPlaybackRateChange";
+    private static final String EVENT_RENDER_FIRST_FRAME = "onRenderedFirstFrame";
 
     static final String[] Events = {
             EVENT_LOAD_START,
@@ -69,6 +70,7 @@ class VideoEventEmitter {
             EVENT_AUDIO_FOCUS_CHANGE,
             EVENT_PLAYBACK_RATE_CHANGE,
             EVENT_BANDWIDTH,
+            EVENT_RENDER_FIRST_FRAME
     };
 
     @Retention(RetentionPolicy.SOURCE)
@@ -93,6 +95,7 @@ class VideoEventEmitter {
             EVENT_AUDIO_FOCUS_CHANGE,
             EVENT_PLAYBACK_RATE_CHANGE,
             EVENT_BANDWIDTH,
+            EVENT_RENDER_FIRST_FRAME
     })
     @interface VideoEvents {
     }
@@ -128,7 +131,7 @@ class VideoEventEmitter {
 
     private static final String EVENT_PROP_TIMED_METADATA = "metadata";
 
-    private static final String EVENT_PROP_BITRATE = "bitrate";   
+    private static final String EVENT_PROP_BITRATE = "bitrate";
 
 
     void setViewId(int viewId) {
@@ -187,7 +190,7 @@ class VideoEventEmitter {
         event.putInt(EVENT_PROP_HEIGHT, height);
         event.putString(EVENT_PROP_TRACK_ID, id);
         receiveEvent(EVENT_BANDWIDTH, event);
-    }    
+    }
 
     void seek(long currentPosition, long seekTime) {
         WritableMap event = Arguments.createMap();
@@ -249,7 +252,7 @@ class VideoEventEmitter {
         WritableArray metadataArray = Arguments.createArray();
 
         for (int i = 0; i < metadata.length(); i++) {
-            
+
             Metadata.Entry entry = metadata.get(i);
 
             if (entry instanceof Id3Frame) {
@@ -270,16 +273,16 @@ class VideoEventEmitter {
                 map.putString("value", value);
 
                 metadataArray.pushMap(map);
-                
+
             } else if (entry instanceof EventMessage) {
-                
+
                 EventMessage eventMessage = (EventMessage) entry;
-                
+
                 WritableMap map = Arguments.createMap();
                 map.putString("identifier", eventMessage.schemeIdUri);
                 map.putString("value", eventMessage.value);
                 metadataArray.pushMap(map);
-                
+
             }
         }
 
@@ -300,5 +303,9 @@ class VideoEventEmitter {
 
     private void receiveEvent(@VideoEvents String type, WritableMap event) {
         eventEmitter.receiveEvent(viewId, type, event);
+    }
+
+    void onRenderedFirstFrame() {
+        receiveEvent(EVENT_RENDER_FIRST_FRAME, null);
     }
 }

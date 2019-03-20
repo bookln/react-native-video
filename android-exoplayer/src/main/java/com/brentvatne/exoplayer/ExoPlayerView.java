@@ -41,6 +41,15 @@ public final class ExoPlayerView extends FrameLayout {
 
     private boolean useTextureView = true;
     private boolean hideShutterView = false;
+    private ExoPlayerViewDelegate mDelegate;
+
+    public ExoPlayerViewDelegate getDelegate() {
+        return mDelegate;
+    }
+
+    public void setDelegate(ExoPlayerViewDelegate delegate) {
+        mDelegate = delegate;
+    }
 
     public ExoPlayerView(Context context) {
         this(context, null);
@@ -231,6 +240,9 @@ public final class ExoPlayerView extends FrameLayout {
         @Override
         public void onRenderedFirstFrame() {
             shutterView.setVisibility(INVISIBLE);
+            if (mDelegate != null) {
+                mDelegate.onRenderedFirstFrame();
+            }
         }
 
         // ExoPlayer.EventListener implementation
@@ -284,6 +296,10 @@ public final class ExoPlayerView extends FrameLayout {
         public void onRepeatModeChanged(int repeatMode) {
             // Do nothing.
         }
+    }
+
+    public interface ExoPlayerViewDelegate {
+        void onRenderedFirstFrame();
     }
 
 }
