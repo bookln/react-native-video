@@ -150,6 +150,12 @@ export default class Video extends Component {
     }
   };
 
+  _onVideoSeekComplete = () => {
+    if (this.props.onVideoSeekComplete) {
+      this.props.onVideoSeekComplete();
+    }
+  };
+
   _onAudioFocusChanged = (event) => {
     if (this.props.onAudioFocusChanged) {
       this.props.onAudioFocusChanged(event.nativeEvent);
@@ -216,7 +222,8 @@ export default class Video extends Component {
       onPlaybackRateChange: this._onPlaybackRateChange,
       onAudioFocusChanged: this._onAudioFocusChanged,
       onAudioBecomingNoisy: this._onAudioBecomingNoisy,
-      onRenderedFirstFrame: this._onRenderedFirstFrame
+      onRenderedFirstFrame: this._onRenderedFirstFrame,
+      onVideoSeekComplete: this._onVideoSeekComplete
     });
 
     if (this.props.poster && this.state.showPoster) {
@@ -311,6 +318,7 @@ Video.propTypes = {
   onAudioFocusChanged: PropTypes.func,
   onAudioBecomingNoisy: PropTypes.func,
   onRenderedFirstFrame: PropTypes.func,
+  onVideoSeekComplete: PropTypes.func,
 
   /* Required by react-native */
   scaleX: PropTypes.number,

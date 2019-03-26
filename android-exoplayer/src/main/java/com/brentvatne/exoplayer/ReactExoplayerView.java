@@ -498,7 +498,7 @@ class ReactExoplayerView extends FrameLayout implements
 
     @Override
     public void onSeekProcessed() {
-
+        eventEmitter.onVideoSeekComplete();
     }
 
     @Override
