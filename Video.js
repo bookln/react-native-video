@@ -221,6 +221,12 @@ export default class Video extends Component {
     }
   };
 
+  _onRenderedFirstFrame = () => {
+    if (this.props.onRenderedFirstFrame) {
+      this.props.onRenderedFirstFrame();
+    }
+  };
+
   _onAudioFocusChanged = (event) => {
     if (this.props.onAudioFocusChanged) {
       this.props.onAudioFocusChanged(event.nativeEvent);
@@ -328,6 +334,7 @@ export default class Video extends Component {
       onGetLicense: nativeProps.drm && nativeProps.drm.getLicense && this._onGetLicense,
       onPictureInPictureStatusChanged: this._onPictureInPictureStatusChanged,
       onRestoreUserInterfaceForPictureInPictureStop: this._onRestoreUserInterfaceForPictureInPictureStop,
+      onRenderedFirstFrame: this._onRenderedFirstFrame
     });
 
     const posterStyle = {
@@ -501,6 +508,7 @@ Video.propTypes = {
   onPictureInPictureStatusChanged: PropTypes.func,
   needsToRestoreUserInterfaceForPictureInPictureStop: PropTypes.func,
   onExternalPlaybackChange: PropTypes.func,
+  onRenderedFirstFrame: PropTypes.func,
 
   /* Required by react-native */
   scaleX: PropTypes.number,
