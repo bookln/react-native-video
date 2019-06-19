@@ -17,7 +17,7 @@ android {
 
 dependencies {
     provided 'com.facebook.react:react-native:+'
-    implementation 'com.google.android.exoplayer:exoplayer:2.9.2'
+    api 'com.google.android.exoplayer:exoplayer:2.9.2'
     compile('com.google.android.exoplayer:extension-okhttp:2.9.2') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
