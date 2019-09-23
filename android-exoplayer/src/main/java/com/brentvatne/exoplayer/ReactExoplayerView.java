@@ -506,6 +506,7 @@ class ReactExoplayerView extends FrameLayout implements
     public void onPlayerError(ExoPlaybackException e) {
         String errorString = null;
         Exception ex = e;
+        boolean unableToDecode = false;
         if (e.type == ExoPlaybackException.TYPE_RENDERER) {
             Exception cause = e.getRendererException();
             if (cause instanceof MediaCodecRenderer.DecoderInitializationException) {
@@ -526,15 +527,17 @@ class ReactExoplayerView extends FrameLayout implements
                     errorString = getResources().getString(R.string.error_instantiating_decoder,
                             decoderInitializationException.decoderName);
                 }
+                unableToDecode = true;
             }
         } else if (e.type == ExoPlaybackException.TYPE_SOURCE) {
             ex = e.getSourceException();
             errorString = getResources().getString(R.string.unrecognized_media_format);
         } else if (e.type == ExoPlaybackException.TYPE_UNEXPECTED) {
             errorString = e.getMessage();
+            unableToDecode = true;
         }
         if (errorString != null) {
-            eventEmitter.error(errorString, ex);
+            eventEmitter.error(errorString, ex, unableToDecode);
         }
         playerNeedsSource = true;
         if (isBehindLiveWindow(e)) {

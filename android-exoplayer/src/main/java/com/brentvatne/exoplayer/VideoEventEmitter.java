@@ -180,10 +180,11 @@ public class VideoEventEmitter {
         receiveEvent(EVENT_END, null);
     }
 
-    void error(String errorString, Exception exception) {
+    void error(String errorString, Exception exception, boolean unableToDecode) {
         WritableMap error = Arguments.createMap();
         error.putString(EVENT_PROP_ERROR_STRING, errorString);
         error.putString(EVENT_PROP_ERROR_EXCEPTION, exception.getMessage());
+        error.putBoolean("unableToDecode", unableToDecode);
         WritableMap event = Arguments.createMap();
         event.putMap(EVENT_PROP_ERROR, error);
         receiveEvent(EVENT_ERROR, event);
