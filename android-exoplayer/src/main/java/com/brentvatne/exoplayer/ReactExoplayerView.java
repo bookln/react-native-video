@@ -112,7 +112,7 @@ class ReactExoplayerView extends FrameLayout implements
                     if (player != null
                             && player.getPlaybackState() == ExoPlayer.STATE_READY
                             && player.getPlayWhenReady()
-                            ) {
+                    ) {
                         long pos = player.getCurrentPosition();
                         eventEmitter.progressChanged(pos, player.getBufferedPercentage());
                         msg = obtainMessage(SHOW_PROGRESS);
@@ -207,7 +207,8 @@ class ReactExoplayerView extends FrameLayout implements
 
     // Internal methods
 
-    private void initializePlayer() { setPlayWhenReady(!isPaused);
+    private void initializePlayer() {
+        setPlayWhenReady(!isPaused);
         if (player == null) {
             TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
             trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
@@ -482,7 +483,7 @@ class ReactExoplayerView extends FrameLayout implements
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest,int reason) {
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
         // Do nothing.
     }
 
@@ -529,6 +530,8 @@ class ReactExoplayerView extends FrameLayout implements
         } else if (e.type == ExoPlaybackException.TYPE_SOURCE) {
             ex = e.getSourceException();
             errorString = getResources().getString(R.string.unrecognized_media_format);
+        } else if (e.type == ExoPlaybackException.TYPE_UNEXPECTED) {
+            errorString = e.getMessage();
         }
         if (errorString != null) {
             eventEmitter.error(errorString, ex);

@@ -1,6 +1,7 @@
 package com.brentvatne.exoplayer;
 
 import androidx.annotation.StringDef;
+
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
@@ -15,35 +16,35 @@ import com.google.android.exoplayer2.metadata.id3.TextInformationFrame;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-class VideoEventEmitter {
+public class VideoEventEmitter {
 
     private final RCTEventEmitter eventEmitter;
 
     private int viewId = View.NO_ID;
 
-    VideoEventEmitter(ReactContext reactContext) {
+    public VideoEventEmitter(ReactContext reactContext) {
         this.eventEmitter = reactContext.getJSModule(RCTEventEmitter.class);
     }
 
-    private static final String EVENT_LOAD_START = "onVideoLoadStart";
-    private static final String EVENT_LOAD = "onVideoLoad";
-    private static final String EVENT_ERROR = "onVideoError";
-    private static final String EVENT_PROGRESS = "onVideoProgress";
-    private static final String EVENT_SEEK = "onVideoSeek";
-    private static final String EVENT_END = "onVideoEnd";
-    private static final String EVENT_STALLED = "onPlaybackStalled";
-    private static final String EVENT_RESUME = "onPlaybackResume";
-    private static final String EVENT_READY = "onReadyForDisplay";
-    private static final String EVENT_BUFFER = "onVideoBuffer";
-    private static final String EVENT_IDLE = "onVideoIdle";
-    private static final String EVENT_TIMED_METADATA = "onTimedMetadata";
-    private static final String EVENT_AUDIO_BECOMING_NOISY = "onAudioBecomingNoisy";
-    private static final String EVENT_AUDIO_FOCUS_CHANGE = "onAudioFocusChanged";
-    private static final String EVENT_PLAYBACK_RATE_CHANGE = "onPlaybackRateChange";
-    private static final String EVENT_RENDER_FIRST_FRAME = "onRenderedFirstFrame";
-    private static final String EVENT_SEEK_COMPLETE = "onVideoSeekComplete";
+    public static final String EVENT_LOAD_START = "onVideoLoadStart";
+    public static final String EVENT_LOAD = "onVideoLoad";
+    public static final String EVENT_ERROR = "onVideoError";
+    public static final String EVENT_PROGRESS = "onVideoProgress";
+    public static final String EVENT_SEEK = "onVideoSeek";
+    public static final String EVENT_END = "onVideoEnd";
+    public static final String EVENT_STALLED = "onPlaybackStalled";
+    public static final String EVENT_RESUME = "onPlaybackResume";
+    public static final String EVENT_READY = "onReadyForDisplay";
+    public static final String EVENT_BUFFER = "onVideoBuffer";
+    public static final String EVENT_IDLE = "onVideoIdle";
+    public static final String EVENT_TIMED_METADATA = "onTimedMetadata";
+    public static final String EVENT_AUDIO_BECOMING_NOISY = "onAudioBecomingNoisy";
+    public static final String EVENT_AUDIO_FOCUS_CHANGE = "onAudioFocusChanged";
+    public static final String EVENT_PLAYBACK_RATE_CHANGE = "onPlaybackRateChange";
+    public static final String EVENT_RENDER_FIRST_FRAME = "onRenderedFirstFrame";
+    public static final String EVENT_SEEK_COMPLETE = "onVideoSeekComplete";
 
-    static final String[] Events = {
+    public static final String[] Events = {
             EVENT_LOAD_START,
             EVENT_LOAD,
             EVENT_ERROR,
@@ -190,7 +191,7 @@ class VideoEventEmitter {
 
     void playbackRateChange(float rate) {
         WritableMap map = Arguments.createMap();
-        map.putDouble(EVENT_PROP_PLAYBACK_RATE, (double)rate);
+        map.putDouble(EVENT_PROP_PLAYBACK_RATE, (double) rate);
         receiveEvent(EVENT_PLAYBACK_RATE_CHANGE, map);
     }
 

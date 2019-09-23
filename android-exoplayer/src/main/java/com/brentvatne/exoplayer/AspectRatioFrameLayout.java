@@ -22,7 +22,7 @@ import android.widget.FrameLayout;
 /**
  * A {@link FrameLayout} that resizes itself to match a specified aspect ratio.
  */
-public final class AspectRatioFrameLayout extends FrameLayout {
+public class AspectRatioFrameLayout extends FrameLayout {
 
     /**
      * The {@link FrameLayout} will not resize itself if the fractional difference between its natural
@@ -36,7 +36,8 @@ public final class AspectRatioFrameLayout extends FrameLayout {
     private static final float MAX_ASPECT_RATIO_DEFORMATION_FRACTION = 0.01f;
 
     private float videoAspectRatio;
-    private @ResizeMode.Mode int resizeMode = ResizeMode.RESIZE_MODE_FIT;
+    private @ResizeMode.Mode
+    int resizeMode = ResizeMode.RESIZE_MODE_FIT;
 
     public AspectRatioFrameLayout(Context context) {
         this(context, null);
@@ -84,7 +85,8 @@ public final class AspectRatioFrameLayout extends FrameLayout {
      *
      * @return resizeMode The resize mode.
      */
-    public @ResizeMode.Mode int getResizeMode() {
+    public @ResizeMode.Mode
+    int getResizeMode() {
         return resizeMode;
     }
 
@@ -107,7 +109,6 @@ public final class AspectRatioFrameLayout extends FrameLayout {
             // We're within the allowed tolerance.
             return;
         }
-
         switch (resizeMode) {
             case ResizeMode.RESIZE_MODE_FIXED_WIDTH:
                 height = (int) (measuredWidth / videoAspectRatio);
