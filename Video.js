@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, requireNativeComponent, NativeModules, View, ViewPropTypes, Image} from 'react-native';
+import {StyleSheet, requireNativeComponent, NativeModules, View, ViewPropTypes, Image, Platform} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import VideoResizeMode from './VideoResizeMode.js';
 
@@ -226,37 +226,32 @@ export default class Video extends Component {
       onVideoSeekComplete: this._onVideoSeekComplete
     });
 
-    if (this.props.poster && this.state.showPoster) {
-      const posterStyle = {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        resizeMode: 'contain',
-      };
-
-      return (
-        <View style={nativeProps.style}>
-          <RCTVideo
-            ref={this._assignRoot}
-            {...nativeProps}
-          />
-          <Image
-            style={posterStyle}
-            source={{uri: this.props.poster}}
-          />
-        </View>
-      );
-    }
-
-    return (
-      <RCTVideo
-        ref={this._assignRoot}
-        {...nativeProps}
-      />
-    );
+      if (this.props.poster && this.state.showPoster) {
+          const posterStyle = {
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              resizeMode: 'contain',
+          };
+          return (
+              <View style={nativeProps.style}>
+              {this._renderNativeVideo(nativeProps)}
+              <Image style={posterStyle} source={{ uri: this.props.poster }} />
+              </View>
+            );
+      }
+      return this._renderNativeVideo(nativeProps);
   }
+
+  _renderNativeVideo = (nativeProps: Object) => {
+    if (Platform.OS === 'android' && this.props.useIJKVideo) {
+      return <RCTIJKVideo ref={this._assignRoot} {...nativeProps} />;
+    } else {
+      return <RCTVideo ref={this._assignRoot} {...nativeProps} />;
+    }
+  };
 }
 
 Video.propTypes = {
@@ -326,10 +321,19 @@ Video.propTypes = {
   translateX: PropTypes.number,
   translateY: PropTypes.number,
   rotation: PropTypes.number,
+  useIJKVideo: PropTypes.bool,
   ...ViewPropTypes,
 };
 
 const RCTVideo = requireNativeComponent('RCTVideo', Video, {
+  nativeOnly: {
+    src: true,
+    seek: true,
+    fullscreen: true,
+  },
+});
+
+const RCTIJKVideo = requireNativeComponent('RCTIJKVideo', Video, {
   nativeOnly: {
     src: true,
     seek: true,
