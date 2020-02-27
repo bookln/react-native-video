@@ -47,6 +47,7 @@ static NSString *const timedMetadata = @"timedMetadata";
   NSString * _resizeMode;
   BOOL _fullscreenPlayerPresented;
   UIViewController * _presentingViewController;
+  BOOL _pausedWhenResignActive;
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
@@ -149,10 +150,10 @@ static NSString *const timedMetadata = @"timedMetadata";
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
+  _pausedWhenResignActive = _paused;
   if (_playInBackground || _playWhenInactive || _paused) return;
 
-  [_player pause];
-  [_player setRate:0.0];
+  [self setPaused:TRUE];
 }
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
@@ -165,6 +166,9 @@ static NSString *const timedMetadata = @"timedMetadata";
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
 {
+  if(!_playInBackground){
+     _paused = _pausedWhenResignActive;
+  }
   [self applyModifiers];
   if (_playInBackground) {
     [_playerLayer setPlayer:_player];
