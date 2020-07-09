@@ -30,7 +30,10 @@ import java.lang.Math;
 
 @SuppressLint("ViewConstructor")
 public class ReactVideoView extends ScalableVideoView implements MediaPlayer.OnPreparedListener, MediaPlayer
-        .OnErrorListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnInfoListener, LifecycleEventListener, MediaController.MediaPlayerControl {
+        .OnErrorListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnInfoListener, LifecycleEventListener, MediaController.MediaPlayerControl,
+        MediaPlayer.OnSeekCompleteListener
+         {
 
     public enum Events {
         EVENT_LOAD_START("onVideoLoadStart"),
@@ -41,7 +44,8 @@ public class ReactVideoView extends ScalableVideoView implements MediaPlayer.OnP
         EVENT_END("onVideoEnd"),
         EVENT_STALLED("onPlaybackStalled"),
         EVENT_RESUME("onPlaybackResume"),
-        EVENT_READY_FOR_DISPLAY("onReadyForDisplay");
+        EVENT_READY_FOR_DISPLAY("onReadyForDisplay"),
+        EVENT_SEEK_COMPLETE("onVideoSeekComplete");
 
         private final String mName;
 
@@ -182,6 +186,7 @@ public class ReactVideoView extends ScalableVideoView implements MediaPlayer.OnP
             mMediaPlayer.setOnBufferingUpdateListener(this);
             mMediaPlayer.setOnCompletionListener(this);
             mMediaPlayer.setOnInfoListener(this);
+            mMediaPlayer.setOnSeekCompleteListener(this);
         }
     }
 
@@ -479,6 +484,11 @@ public class ReactVideoView extends ScalableVideoView implements MediaPlayer.OnP
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
         mVideoBufferedDuration = (int) Math.round((double) (mVideoDuration * percent) / 100.0);
+    }
+
+    @Override
+    public void onSeekComplete(MediaPlayer mp) {
+        mEventEmitter.receiveEvent(getId(), Events.EVENT_SEEK_COMPLETE.toString(), Arguments.createMap());
     }
 
     @Override
