@@ -272,6 +272,10 @@ static NSString *const timedMetadata = @"timedMetadata";
 
 - (void)setSrc:(NSDictionary *)source
 {
+  NSString *uri = [source objectForKey:@"uri"];
+  if(uri == nil || uri.length == 0) {
+     return;
+  }
   [self removePlayerTimeObserver];
   [self removePlayerItemObservers];
   _playerItem = [self playerItemForSource:source];
