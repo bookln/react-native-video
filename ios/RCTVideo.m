@@ -273,7 +273,7 @@ static NSString *const timedMetadata = @"timedMetadata";
 - (void)setSrc:(NSDictionary *)source
 {
   NSString *uri = [source objectForKey:@"uri"];
-  if(uri == nil || uri.length == 0) {
+  if(uri.length == 0) {
      return;
   }
   [self removePlayerTimeObserver];
@@ -574,7 +574,7 @@ static NSString *const timedMetadata = @"timedMetadata";
 
     if (CMTimeCompare(current, cmSeekTime) != 0) {
      if (!wasPaused) [_player pause];
-      [item seekToTime:cmSeekTime completionHandler:^(BOOL finished) {
+      [item seekToTime:cmSeekTime toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
        if (!wasPaused) {
          [self setPaused:false];
        };
