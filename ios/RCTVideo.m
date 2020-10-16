@@ -540,6 +540,8 @@ static NSString *const timedMetadata = @"timedMetadata";
       [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     } else if([_ignoreSilentSwitch isEqualToString:@"obey"]) {
       [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+    } else if([_ignoreSilentSwitch isEqualToString:@"playAndRecord"]) {
+      [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
     [_player play];
     [_player setRate:_rate];
