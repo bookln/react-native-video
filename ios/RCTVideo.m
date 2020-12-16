@@ -39,6 +39,7 @@ static NSString *const timedMetadata = @"timedMetadata";
   float _rate;
   BOOL _muted;
   BOOL _paused;
+  BOOL _automaticallyWaitsToMinimizeStalling;
   BOOL _repeat;
   BOOL _playbackStalled;
   BOOL _playInBackground;
@@ -57,6 +58,7 @@ static NSString *const timedMetadata = @"timedMetadata";
 
     _playbackRateObserverRegistered = NO;
     _playbackStalled = NO;
+    _automaticallyWaitsToMinimizeStalling = YES;
     _rate = 1.0;
     _volume = 1.0;
     _resizeMode = @"AVLayerVideoGravityResizeAspectFill";
@@ -295,6 +297,11 @@ static NSString *const timedMetadata = @"timedMetadata";
   _player.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
   [_player addObserver:self forKeyPath:playbackRate options:0 context:nil];
+    
+  if (@available(iOS 10.0, *)) {
+     [self setAutomaticallyWaitsToMinimizeStalling:_automaticallyWaitsToMinimizeStalling];
+  }
+    
   _playbackRateObserverRegistered = YES;
 
   const Float64 progressUpdateIntervalMS = _progressUpdateInterval / 1000;
@@ -318,6 +325,12 @@ static NSString *const timedMetadata = @"timedMetadata";
                                         });
     }
   });
+}
+
+- (void)setAutomaticallyWaitsToMinimizeStalling:(BOOL)waits
+{
+    _automaticallyWaitsToMinimizeStalling = waits;
+    _player.automaticallyWaitsToMinimizeStalling = waits;
 }
 
 - (AVPlayerItem*)playerItemForSource:(NSDictionary *)source
@@ -543,9 +556,16 @@ static NSString *const timedMetadata = @"timedMetadata";
     } else if([_ignoreSilentSwitch isEqualToString:@"playAndRecord"]) {
       [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
-    [_player play];
-    [_player setRate:_rate];
-  }
+
+    if (_paused) {
+        if (@available(iOS 10.0, *) && !_automaticallyWaitsToMinimizeStalling) {
+            [_player playImmediatelyAtRate:_rate];
+        } else {
+            [_player play];
+        }
+        }
+      [_player setRate:_rate];
+    }
 
   _paused = paused;
 }
