@@ -543,8 +543,13 @@ static NSString *const timedMetadata = @"timedMetadata";
     } else if([_ignoreSilentSwitch isEqualToString:@"playAndRecord"]) {
       [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
     }
-    [_player play];
-    [_player setRate:_rate];
+    
+    if (@available(iOS 10.0, *)) {
+      [_player playImmediatelyAtRate:_rate];
+    } else {
+      [_player play];
+      [_player setRate:_rate];
+    }
   }
 
   _paused = paused;
