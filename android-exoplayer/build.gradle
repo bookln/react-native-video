@@ -21,7 +21,7 @@ dependencies {
     compile('com.google.android.exoplayer:extension-okhttp:2.9.2') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
-    compile ('com.squareup.okhttp3:okhttp:3.10.0'){
+    compile ('com.squareup.okhttp3:okhttp:3.12.1'){
         exclude group: 'com.squareup.okio', module: 'okio'
     }
     compile 'androidx.annotation:annotation:1.1.0'
