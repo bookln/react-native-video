@@ -334,10 +334,12 @@ export default class Video extends Component {
       ...StyleSheet.absoluteFillObject,
       resizeMode: this.props.posterResizeMode || 'contain',
     };
-
+  const { useIJKVideo } = this.props;
+  const VideoClass =
+    useIJKVideo && Platform.OS === 'android' ? RCTIJKVideo : RCTVideo;
     return (
       <View style={nativeProps.style}>
-        <RCTVideo
+        <VideoClass
           ref={this._assignRoot}
           {...nativeProps}
           style={StyleSheet.absoluteFill}
@@ -510,6 +512,14 @@ Video.propTypes = {
 };
 
 const RCTVideo = requireNativeComponent('RCTVideo', Video, {
+  nativeOnly: {
+    src: true,
+    seek: true,
+    fullscreen: true,
+  },
+});
+
+const RCTIJKVideo = requireNativeComponent('RCTIJKVideo', Video, {
   nativeOnly: {
     src: true,
     seek: true,
