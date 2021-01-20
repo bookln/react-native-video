@@ -356,6 +356,10 @@ static int const RCTVideoUnset = -1;
 
 - (void)setSrc:(NSDictionary *)source
 {
+  NSString *uri = [source objectForKey:@"uri"];
+  if(uri == nil || uri.length == 0) {
+     return;
+  }
   _source = source;
   [self removePlayerLayer];
   [self removePlayerTimeObserver];
