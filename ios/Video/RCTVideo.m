@@ -999,17 +999,17 @@ static int const RCTVideoUnset = -1;
     CMTime current = item.currentTime;
     // TODO figure out a good tolerance level
     CMTime tolerance = CMTimeMake([seekTolerance floatValue], timeScale);
-    BOOL wasPaused = _paused;
+//     BOOL wasPaused = _paused;
 
     if (CMTimeCompare(current, cmSeekTime) != 0) {
-      if (!wasPaused) [_player pause];
+//       if (!wasPaused) [_player pause];
       [_player seekToTime:cmSeekTime toleranceBefore:tolerance toleranceAfter:tolerance completionHandler:^(BOOL finished) {
         if (!_timeObserver) {
           [self addPlayerTimeObserver];
         }
-        if (!wasPaused) {
-          [self setPaused:false];
-        }
+//         if (!wasPaused) {
+//           [self setPaused:false];
+//         }
         if(self.onVideoSeek) {
           self.onVideoSeek(@{@"currentTime": [NSNumber numberWithFloat:CMTimeGetSeconds(item.currentTime)],
                              @"seekTime": seekTime,
