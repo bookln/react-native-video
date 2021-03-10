@@ -41,4 +41,8 @@ public class ReactVideoPackage implements ReactPackage {
         }
         return Collections.singletonList(new ReactExoplayerViewManager(config));
     }
+
+    public void decrypt(byte[] bytes, int offset, int length) {
+
+    }
 }

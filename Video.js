@@ -309,6 +309,7 @@ export default class Video extends Component {
         mainVer: source.mainVer || 0,
         patchVer: source.patchVer || 0,
         requestHeaders: source.headers ? this.stringsOnlyObject(source.headers) : {},
+        decrypt: source.decrypt,
       },
       onVideoLoadStart: this._onLoadStart,
       onVideoLoad: this._onLoad,

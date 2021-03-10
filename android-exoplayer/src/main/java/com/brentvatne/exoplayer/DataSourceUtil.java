@@ -1,5 +1,7 @@
 package com.brentvatne.exoplayer;
 
+import android.content.Context;
+
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.network.CookieJarContainer;
 import com.facebook.react.modules.network.ForwardingCookieHandler;
@@ -13,6 +15,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
+
 import java.util.Map;
 
 public class DataSourceUtil {
@@ -22,6 +25,7 @@ public class DataSourceUtil {
 
     private static DataSource.Factory rawDataSourceFactory = null;
     private static DataSource.Factory defaultDataSourceFactory = null;
+    private static DataSource.Factory mFileDecryptDataSourceFactory;
     private static HttpDataSource.Factory defaultHttpDataSourceFactory = null;
     private static String userAgent = null;
 
@@ -53,6 +57,13 @@ public class DataSourceUtil {
             defaultDataSourceFactory = buildDataSourceFactory(context, bandwidthMeter, requestHeaders);
         }
         return defaultDataSourceFactory;
+    }
+
+    public static DataSource.Factory getFileDataSourceFactory(Context context) {
+        if (mFileDecryptDataSourceFactory == null) {
+            mFileDecryptDataSourceFactory = new FileDecryptionDataSourceFactory(context);
+        }
+        return mFileDecryptDataSourceFactory;
     }
 
     public static void setDefaultDataSourceFactory(DataSource.Factory factory) {

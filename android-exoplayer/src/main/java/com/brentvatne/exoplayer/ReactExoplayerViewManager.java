@@ -70,6 +70,8 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
     private static final String PROP_SELECTED_VIDEO_TRACK_VALUE = "value";
     private static final String PROP_HIDE_SHUTTER_VIEW = "hideShutterView";
     private static final String PROP_CONTROLS = "controls";
+    private static final String PROP_DECRYPT = "decrypt";
+
 
     private ReactExoplayerConfig config;
 
@@ -93,7 +95,8 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
     }
 
     @Override
-    public @Nullable Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    public @Nullable
+    Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         MapBuilder.Builder<String, Object> builder = MapBuilder.builder();
         for (String event : VideoEventEmitter.Events) {
             builder.put(event, MapBuilder.of("registrationName", event));
@@ -102,7 +105,8 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
     }
 
     @Override
-    public @Nullable Map<String, Object> getExportedViewConstants() {
+    public @Nullable
+    Map<String, Object> getExportedViewConstants() {
         return MapBuilder.<String, Object>of(
                 "ScaleNone", Integer.toString(ResizeMode.RESIZE_MODE_FIT),
                 "ScaleAspectFit", Integer.toString(ResizeMode.RESIZE_MODE_FIT),
@@ -141,6 +145,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
         Context context = videoView.getContext().getApplicationContext();
         String uriString = src.hasKey(PROP_SRC_URI) ? src.getString(PROP_SRC_URI) : null;
         String extension = src.hasKey(PROP_SRC_TYPE) ? src.getString(PROP_SRC_TYPE) : null;
+        boolean decrypt = src.hasKey(PROP_DECRYPT) && src.getBoolean(PROP_DECRYPT);
         Map<String, String> headers = src.hasKey(PROP_SRC_HEADERS) ? toStringMap(src.getMap(PROP_SRC_HEADERS)) : null;
 
         if (TextUtils.isEmpty(uriString)) {
@@ -151,19 +156,20 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
             Uri srcUri = Uri.parse(uriString);
 
             if (srcUri != null) {
+                videoView.setDecrypt(decrypt);
                 videoView.setSrc(srcUri, extension, headers);
             }
         } else {
             int identifier = context.getResources().getIdentifier(
-                uriString,
-                "drawable",
-                context.getPackageName()
+                    uriString,
+                    "drawable",
+                    context.getPackageName()
             );
             if (identifier == 0) {
                 identifier = context.getResources().getIdentifier(
-                    uriString,
-                    "raw",
-                    context.getPackageName()
+                        uriString,
+                        "raw",
+                        context.getPackageName()
                 );
             }
             if (identifier > 0) {
@@ -192,7 +198,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
 
     @ReactProp(name = PROP_SELECTED_VIDEO_TRACK)
     public void setSelectedVideoTrack(final ReactExoplayerView videoView,
-                                     @Nullable ReadableMap selectedVideoTrack) {
+                                      @Nullable ReadableMap selectedVideoTrack) {
         String typeString = null;
         Dynamic value = null;
         if (selectedVideoTrack != null) {
@@ -206,7 +212,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
 
     @ReactProp(name = PROP_SELECTED_AUDIO_TRACK)
     public void setSelectedAudioTrack(final ReactExoplayerView videoView,
-                                     @Nullable ReadableMap selectedAudioTrack) {
+                                      @Nullable ReadableMap selectedAudioTrack) {
         String typeString = null;
         Dynamic value = null;
         if (selectedAudioTrack != null) {
@@ -313,6 +319,7 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
         videoView.setControls(controls);
     }
 
+
     @ReactProp(name = PROP_BUFFER_CONFIG)
     public void setBufferConfig(final ReactExoplayerView videoView, @Nullable ReadableMap bufferConfig) {
         int minBufferMs = DefaultLoadControl.DEFAULT_MIN_BUFFER_MS;
@@ -340,7 +347,8 @@ public class ReactExoplayerViewManager extends ViewGroupManager<ReactExoplayerVi
                 || uriString.startsWith("asset://");
     }
 
-    private @ResizeMode.Mode int convertToIntDef(String resizeModeOrdinalString) {
+    private @ResizeMode.Mode
+    int convertToIntDef(String resizeModeOrdinalString) {
         if (!TextUtils.isEmpty(resizeModeOrdinalString)) {
             int resizeModeOrdinal = Integer.parseInt(resizeModeOrdinalString);
             return ResizeMode.toResizeMode(resizeModeOrdinal);
