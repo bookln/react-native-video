@@ -714,7 +714,7 @@ static int const RCTVideoUnset = -1;
       self.onVideoBuffer(@{@"isBuffering": @(YES), @"target": self.reactTag});
     } else if ([keyPath isEqualToString:playbackLikelyToKeepUpKeyPath]) {
       // Continue playing (or not if paused) after being paused due to hitting an unbuffered zone.
-      if ((!(_controls || _fullscreenPlayerPresented) || _playerBufferEmpty) && _playerItem.playbackLikelyToKeepUp) {
+      if (_playerBufferEmpty && _playerItem.playbackLikelyToKeepUp) {
         [self setPaused:_paused];
       }
       _playerBufferEmpty = NO;
