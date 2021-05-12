@@ -158,6 +158,7 @@ class ReactExoplayerView extends FrameLayout implements
     private String[] drmLicenseHeader = null;
     private boolean controls;
     private boolean decrypt;
+    private boolean isVideoDropped;
     // \ End props
 
     // React
@@ -205,6 +206,7 @@ class ReactExoplayerView extends FrameLayout implements
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         themedReactContext.addLifecycleEventListener(this);
         audioBecomingNoisyReceiver = new AudioBecomingNoisyReceiver(themedReactContext);
+        this.isVideoDropped = false;
     }
 
 
@@ -278,6 +280,7 @@ class ReactExoplayerView extends FrameLayout implements
     }
 
     public void cleanUpResources() {
+        this.isVideoDropped = true;
         stopPlayback();
     }
 
@@ -402,6 +405,9 @@ class ReactExoplayerView extends FrameLayout implements
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (isVideoDropped) {
+                    return;
+                }
                 if (player == null) {
                     TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
                     trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
