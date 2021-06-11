@@ -2011,6 +2011,8 @@ didCancelLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest {
     self.onRestoreUserInterfaceForPictureInPictureStop(@{});
   }
   _restoreUserInterfaceForPIPStopCompletionHandler = completionHandler;
+  [self setRestoreUserInterfaceForPIPStopCompletionHandler:YES];
+
 }
 #endif
 
